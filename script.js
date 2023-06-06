@@ -1,12 +1,37 @@
 let tasks = [];
 const addTaskInput = document.getElementById('add');
-const tasksCounter = document.getElementById('tasks-counter');
-const taskList = document.getElementById('list');
+const tasksCounter = document.getElementById('task_counter');
+const tasksList = document.getElementById('list');
 
-function renderList(){}
+function addTaskToLi(task){
+    const li = document.createElement('li');
+    li.innerHTML = `
+        <input type="checkbox" id="${task.id}" ${task.done ? 'checked' : ''} class="custom-checkbox">
+        <label for = "${task.id}"> ${task}</label>
+        <i class="fa-solid fa-trash-can" data-id="${task.id}"></i>
+    `;
+    tasksList.append(li);
+}
+
+function renderList(){
+    // This function will show list on page.
+    tasksList.innerHTML = ``;
+
+    for(let i = 0; i < tasks.length; i++){
+        addTaskToLi(tasks[i])
+    }
+    tasksCounter.innerHTML = tasks.length;
+}
 
 function markTaskAsComplete(taskId){
-    const task = tasks.filter((task) => {return task.id === taskId})
+    const task = tasks.filter((task) => {return task.id === taskId});
+
+    if(task.length > 0){
+        const currentTask = task[0];
+        currentTask.done = !currentTask.done;
+        renderList();
+        showNotification('Task toggled successfully');
+    }
 }
 
 function deleteTask(taskId){
@@ -38,9 +63,7 @@ function handleInputKeypress(e){
         }
         console.log(text);
         addTask(text);
-    }
-    
+    }   
 }
 
 addTaskInput.addEventListener('keyup', handleInputKeypress);
-
