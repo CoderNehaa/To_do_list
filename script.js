@@ -7,8 +7,8 @@ function addTaskToLi(task){
     const li = document.createElement('li');
     li.innerHTML = `
         <input type="checkbox" id="${task.id}" ${task.done ? 'checked' : ''} class="custom-checkbox">
-        <label for = "${task.id}"> ${task}</label>
-        <i class="fa-solid fa-trash-can" data-id="${task.id}"></i>
+        <label for = "${task.id}"> ${task.text}</label>
+        <i class="fa-solid fa-trash-can delete" data-id="${task.id}"></i>
     `;
     tasksList.append(li);
 }
@@ -24,29 +24,37 @@ function renderList(){
 }
 
 function markTaskAsComplete(taskId){
-    const task = tasks.filter((task) => {return task.id === taskId});
+    const task = tasks.filter(function(task){
+        return task.id === taskId
+    });
 
     if(task.length > 0){
         const currentTask = task[0];
         currentTask.done = !currentTask.done;
         renderList();
         showNotification('Task toggled successfully');
+        return;
     }
+    showNotification('Could not toggle task');
 }
 
 function deleteTask(taskId){
-    const newTasks = tasks.filter((task) => {return task.id !== taskId});
+    const newTasks = tasks.filter(function(task) {
+        return task.id !== taskId
+    });
     tasks = newTasks;
     renderList();
     showNotification('Task deleted successfully!');
 }
 
 function addTask(task){
-    console.log("Hello I am addTask function and I will add ", task , "to task-list.");
-    tasks.push(task);
-    renderList();    
-    showNotification('Task added successfully !');
-    return;
+    if(task){
+        tasks.push(task);
+        renderList();    
+        showNotification('Task added successfully !');
+        return;
+    }
+    showNotification('Task can not be added.')
 }
 
 function showNotification(text){
@@ -58,12 +66,37 @@ function handleInputKeypress(e){
         const text = e.target.value;
 
         if(!text){
-            showNotification('Text can not be empty!');
+            showNotification('Task text can not be empty!');
             return;
         }
-        console.log(text);
-        addTask(text);
+        const task={
+            text,
+            id: Date.now().toString(),
+            done:false
+        }
+        e.target.value="";
+        addTask(task);
     }   
 }
 
-addTaskInput.addEventListener('keyup', handleInputKeypress);
+function handleClick(e){
+    const target = e.target;
+    console.log(target);
+
+    if(target.className === 'fa-solid fa-trash-can delete'){
+        const taskId = target.dataset.id;
+        deleteTask(taskId);
+        return;
+    } else if (target.className === 'custom-checkbox'){
+        const taskId = target.id;
+        markTaskAsComplete(taskId);
+        return;
+    }
+}
+
+function initializeApp(){
+    addTaskInput.addEventListener('keyup', handleInputKeypress);
+    document.addEventListener('click', handleClick);
+}
+
+initializeApp();
