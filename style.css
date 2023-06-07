@@ -118,8 +118,9 @@ ul li:hover {
     text-decoration: line-through;
 }
 
+/* Delete button style */
+
 .delete {
-    height: 28px;
     padding: 5px 0px;
     border-radius: 3px;
 }
