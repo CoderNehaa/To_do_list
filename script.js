@@ -3,6 +3,7 @@ const addTaskInput = document.getElementById('add');
 const tasksCounter = document.getElementById('task_counter');
 const tasksList = document.getElementById('list');
 
+
 function addTaskToLi(task){
     const li = document.createElement('li');
     li.innerHTML = `
@@ -13,8 +14,8 @@ function addTaskToLi(task){
     tasksList.append(li);
 }
 
+// This function will show list on page.
 function renderList(){
-    // This function will show list on page.
     tasksList.innerHTML = ``;
 
     for(let i = 0; i < tasks.length; i++){
@@ -23,6 +24,7 @@ function renderList(){
     tasksCounter.innerHTML = tasks.length;
 }
 
+// Task toggle
 function markTaskAsComplete(taskId){
     const task = tasks.filter(function(task){
         return task.id === taskId
@@ -38,6 +40,7 @@ function markTaskAsComplete(taskId){
     showNotification('Could not toggle task');
 }
 
+// Delete task
 function deleteTask(taskId){
     const newTasks = tasks.filter(function(task) {
         return task.id !== taskId
@@ -47,6 +50,7 @@ function deleteTask(taskId){
     showNotification('Task deleted successfully!');
 }
 
+// Add task
 function addTask(task){
     if(task){
         tasks.push(task);
@@ -57,10 +61,12 @@ function addTask(task){
     showNotification('Task can not be added.')
 }
 
+// Show alerts
 function showNotification(text){
     alert(text);
 }
 
+// Handling enter to add task
 function handleInputKeypress(e){
     if(e.key === 'Enter'){
         const text = e.target.value;
@@ -79,6 +85,7 @@ function handleInputKeypress(e){
     }   
 }
 
+// Handling click events
 function handleClick(e){
     const target = e.target;
     console.log(target);
