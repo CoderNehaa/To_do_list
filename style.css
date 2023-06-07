@@ -26,7 +26,6 @@ h1 {
 /* Input */
 
 .add-task {
-    width: 100%;
     outline: none;
     font-size: 15px;
     padding: 15px;
